@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Select = () => {
+const Select = ({ onChange, selectValue }) => {
   const [select, setSelect] = useState("EUR");
 
   return (
@@ -8,11 +8,8 @@ const Select = () => {
       className="form-select shadow"
       id="selector"
       aria-label="Default select example"
-      value={select}
-      onChange={(e) => {
-        const selectedCurrency = e.target.value;
-        setSelect(selectedCurrency);
-      }}
+      value={selectValue}
+      onChange={onChange}
     >
       <option className="option-rates" value="EUR">
         &#8364; &emsp; EUR

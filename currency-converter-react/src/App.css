@@ -5,7 +5,12 @@
   font-family: "Poppins", sans-serif;
 }
 
-.green-background {
+body {
+  background-color: #198754;
+}
+
+.green-background,
+.zzz {
   background-color: #198754;
 }
 

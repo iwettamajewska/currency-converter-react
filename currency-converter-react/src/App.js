@@ -3,62 +3,69 @@ import Input from "./components/Input";
 import Select from "./components/Select";
 import Result from "./components/Result";
 import Button from "./components/Button";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import { useState } from "react";
+
+const availablecurrencies = ["EUR", "USD", "CHF"];
+// const url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json";
+// const urlEffectiveDate = "http://api.nbp.pl/api/exchangerates/tables/A/";
 
 function App() {
-  const availablecurrencies = ["EUR", "USD", "CHF"];
-  // const url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json";
-  // const urlEffectiveDate = "http://api.nbp.pl/api/exchangerates/tables/A/";
+  const [inputValue, setInputValue] = useState(0);
+  const [selectValue, setSelectValue] = useState("EUR");
+  const [outOfmoney, setOutOfmoney] = useState(0);
 
   const showInputValue = (e) => {
-    console.log(e.target.value);
+    setInputValue(e.target.value);
   };
 
-  const showCalculate = () => {
+  const showSelectValue = (e) => {
+    setSelectValue(e.target.value);
+  };
+
+  // const showCalculate = () => {
+  //   console.log("clicked button");
+  // };
+
+  const getOutOfMoney = () => {
     console.log("clicked button");
+    fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json")
+      .then((response) => response.json())
+      .then((data) => {
+        const threeCurrencies = data[0].rates.filter((element) =>
+          availablecurrencies.includes(element.code)
+        );
+
+        const mid = threeCurrencies.find(
+          (element) => element.code === selectValue
+        ).mid;
+        setOutOfmoney(Number.parseFloat(inputValue * mid).toFixed(2));
+      })
+      .catch((err) => console.log("err", err));
   };
 
-  const calculateCurrency = () => {
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
+  console.log(inputValue, selectValue);
+  // const calculateCurrency = () => {
+  //   const [error, setError] = useState(null);
+  //   const [isLoaded, setIsLoaded] = useState(false);
+  //   const [items, setItems] = useState([]);
+  // }
 
-    useEffect(() => {
-      fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json")
-        .then((response) => response.json())
-        .then((data) => {
-          threeCurrencies = data[0].rates.filter((element) =>
-            availablecurrencies.includes(element.code)
-          );
-          const selectValue = selector.value;
-          const mid = threeCurrencies.find(
-            (element) => element.code === selectValue
-          ).mid;
-          outOfmoney.value = Number.parseFloat(
-            inputOfmoney.value * mid
-          ).toFixed(2);
-        })
-        .catch((err) => console.log("err", err));
+  // useEffect(() => {
+  //   fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const threeCurrencies = data[0].rates.filter((element) =>
+  //         availablecurrencies.includes(element.code)
+  //       );
 
-      // fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json")
-      // .then((response) => response.json())
-      // .then((data) => {
-      //   threeCurrencies = data[0].rates.filter((element) =>
-      //     availablecurrencies.includes(element.code)
-      //   );
-      //   const selectValue = selector.value;
-      //   const mid = threeCurrencies.find(
-      //     (element) => element.code === selectValue
-      //   ).mid;
-      //   outOfmoney.value = Number.parseFloat(inputOfmoney.value * mid).toFixed(
-      //     2
-      //   );
-      // })
-      // .catch((err) => console.log("err", err));
-    });
-  };
-
-  calculateCurrency();
+  //       const mid = threeCurrencies.find(
+  //         (element) => element.code === selectValue
+  //       ).mid;
+  //       setOutOfmoney(Number.parseFloat(inputValue * mid).toFixed(2));
+  //     })
+  //     .catch((err) => console.log("err", err));
+  // }, []);
 
   return (
     <div className="container-sm shadow rounded">
@@ -85,20 +92,20 @@ function App() {
           <Input inputValue={showInputValue} />
         </div>
         <div className="col">
-          <Select />
+          <Select selectValue={selectValue} onChange={showSelectValue} />
         </div>
         <div className="col-1">
           <i className="bi bi-arrow-right arrow"></i>
         </div>
         <div className="col">
           <div className="input-group mb-3">
-            <Result calculate={showCalculate} />
+            <Result calculate={outOfmoney} />
           </div>
         </div>
         <div className="row">
           <div className="col-5"></div>
           <div className="col-2">
-            <Button />
+            <Button calculate={getOutOfMoney} />
           </div>
         </div>
         <div className="row row-effective-date">
