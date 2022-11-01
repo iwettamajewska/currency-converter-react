@@ -3,14 +3,15 @@ import Input from "./components/Input";
 import Select from "./components/Select";
 import Result from "./components/Result";
 import Button from "./components/Button";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 
 const availablecurrencies = ["EUR", "USD", "CHF"];
-// const url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json";
-// const urlEffectiveDate = "http://api.nbp.pl/api/exchangerates/tables/A/";
 
 function App() {
+  const url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json";
+  const urlEffectiveDate = "http://api.nbp.pl/api/exchangerates/tables/A/";
+
   const [inputValue, setInputValue] = useState(0);
   const [selectValue, setSelectValue] = useState("EUR");
   const [outOfmoney, setOutOfmoney] = useState(0);
@@ -29,7 +30,7 @@ function App() {
 
   const getOutOfMoney = () => {
     console.log("clicked button");
-    fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json")
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
         const threeCurrencies = data[0].rates.filter((element) =>
@@ -45,6 +46,17 @@ function App() {
   };
 
   console.log(inputValue, selectValue);
+
+  useEffect(() => {
+    fetch(urlEffectiveDate)
+      .then((response) => response.json())
+      .then((data) => {
+        let effectiveDate = document.querySelector(".effective-date");
+        effectiveDate.innerHTML = data[0].effectiveDate;
+      })
+      .catch((err) => console.error("err", err));
+  }, []);
+
   // const calculateCurrency = () => {
   //   const [error, setError] = useState(null);
   //   const [isLoaded, setIsLoaded] = useState(false);

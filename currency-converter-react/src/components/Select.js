@@ -1,8 +1,4 @@
-import React, { useState } from "react";
-
 const Select = ({ onChange, selectValue }) => {
-  const [select, setSelect] = useState("EUR");
-
   return (
     <select
       className="form-select shadow"

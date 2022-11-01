@@ -1,8 +1,9 @@
 import React from "react";
 
-const Result = () => {
+const Result = ({ calculate }) => {
   return (
     <input
+      value={calculate}
       className="form-control shadow result-pln"
       placeholder="wynik"
       readOnly
