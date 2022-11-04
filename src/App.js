@@ -24,12 +24,7 @@ function App() {
     setSelectValue(e.target.value);
   };
 
-  // const showCalculate = () => {
-  //   console.log("clicked button");
-  // };
-
   const getOutOfMoney = () => {
-    console.log("clicked button");
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -42,7 +37,7 @@ function App() {
         ).mid;
         setOutOfmoney(Number.parseFloat(inputValue * mid).toFixed(2));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => console.error("err", err));
   };
 
   console.log(inputValue, selectValue);
@@ -56,28 +51,6 @@ function App() {
       })
       .catch((err) => console.error("err", err));
   }, []);
-
-  // const calculateCurrency = () => {
-  //   const [error, setError] = useState(null);
-  //   const [isLoaded, setIsLoaded] = useState(false);
-  //   const [items, setItems] = useState([]);
-  // }
-
-  // useEffect(() => {
-  //   fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       const threeCurrencies = data[0].rates.filter((element) =>
-  //         availablecurrencies.includes(element.code)
-  //       );
-
-  //       const mid = threeCurrencies.find(
-  //         (element) => element.code === selectValue
-  //       ).mid;
-  //       setOutOfmoney(Number.parseFloat(inputValue * mid).toFixed(2));
-  //     })
-  //     .catch((err) => console.log("err", err));
-  // }, []);
 
   return (
     <div className="container-sm shadow rounded">

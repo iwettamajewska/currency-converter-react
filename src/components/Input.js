@@ -5,7 +5,6 @@ const Input = ({ inputValue }) => {
     <input
       type="number"
       min="1"
-      // value="100"
       placeholder="100"
       className="form-control shadow amount-of-money"
       id="pln-input"
