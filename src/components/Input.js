@@ -1,11 +1,9 @@
-import React from "react";
-
 const Input = ({ inputValue }) => {
   return (
     <input
       type="number"
       min="1"
-      placeholder="100"
+      placeholder="Wprowadź kwotę do przeliczenia"
       className="form-control shadow amount-of-money"
       id="pln-input"
       aria-label="Sizing example input"

@@ -3,18 +3,18 @@ import Input from "./components/Input";
 import Select from "./components/Select";
 import Result from "./components/Result";
 import Button from "./components/Button";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const availablecurrencies = ["EUR", "USD", "CHF"];
+const availableCurrencies = ["EUR", "USD", "CHF"];
+const url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json/";
+const urlEffectiveDate = "http://api.nbp.pl/api/exchangerates/tables/A/";
+// const errorText = "error text";
 
 function App() {
-  const url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json";
-  const urlEffectiveDate = "http://api.nbp.pl/api/exchangerates/tables/A/";
-
   const [inputValue, setInputValue] = useState(0);
   const [selectValue, setSelectValue] = useState("EUR");
   const [outOfmoney, setOutOfmoney] = useState(0);
+  // const [err, setErr] = useState(null);
 
   const showInputValue = (e) => {
     setInputValue(e.target.value);
@@ -29,7 +29,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         const threeCurrencies = data[0].rates.filter((element) =>
-          availablecurrencies.includes(element.code)
+          availableCurrencies.includes(element.code)
         );
 
         const mid = threeCurrencies.find(
@@ -40,17 +40,43 @@ function App() {
       .catch((err) => console.error("err", err));
   };
 
-  console.log(inputValue, selectValue);
+  // (err) => setErr(err)
+  // (err ? { errorText } : "")
+  // console.error("err", err)
+  // err({ errorText })
+
+  // const ErrorHandler = ({ err }) => {
+  //   return (
+  //     <div role="alert">
+  //       <p>An error occurred:</p>
+  //       <pre>{err.message}</pre>
+  //     </div>
+  //   );
+  // };
 
   useEffect(() => {
     fetch(urlEffectiveDate)
       .then((response) => response.json())
       .then((data) => {
-        let effectiveDate = document.querySelector(".effective-date");
+        // const effectiveDate = data[0].effectiveDate;
+        // effectiveDate.innerHTML = data[0].effectiveDate;
+        // const effectiveDate = document.querySelector(".effective-date");
+        // effectiveDate.innerHTML = data[0].effectiveDate;
+
+        const effectiveDate = document.querySelector(".effective-date");
         effectiveDate.innerHTML = data[0].effectiveDate;
       })
       .catch((err) => console.error("err", err));
   }, []);
+
+  // err
+  // ()();
+  //   {
+  //   return <ErrorHandler error={error} />
+  // }
+  // (err) => (err ? { errorText } : "")
+  // <p>error</p>
+  // console.error("err", err)
 
   return (
     <div className="container-sm shadow rounded">
@@ -98,6 +124,14 @@ function App() {
             Ostatnia aktualizacja:
           </span>
           <span className="col effective-date text"></span>
+          {/* (({getOutOfMoney.err}) ? {errorText} : "") */}
+          {/* {err.length ===
+            1(<span className="alert-text">error text error text</span>)} */}
+          {/* if(isLoading) {
+        return (
+        <div> Loading... </div>
+        )
+    } */}
         </div>
       </div>
     </div>

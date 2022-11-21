@@ -1,5 +1,3 @@
-import React from "react";
-
 const Result = ({ calculate }) => {
   return (
     <input
