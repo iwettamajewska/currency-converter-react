@@ -8,13 +8,13 @@ import { useEffect, useState } from "react";
 const availableCurrencies = ["EUR", "USD", "CHF"];
 const url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json/";
 const urlEffectiveDate = "http://api.nbp.pl/api/exchangerates/tables/A/";
-// const errorText = "error text";
 
 function App() {
   const [inputValue, setInputValue] = useState(0);
   const [selectValue, setSelectValue] = useState("EUR");
   const [outOfmoney, setOutOfmoney] = useState(0);
-  // const [err, setErr] = useState(null);
+  const [effeciveDate, setEffectiveDate] = useState("");
+  const [err, setErr] = useState(false);
 
   const showInputValue = (e) => {
     setInputValue(e.target.value);
@@ -37,46 +37,17 @@ function App() {
         ).mid;
         setOutOfmoney(Number.parseFloat(inputValue * mid).toFixed(2));
       })
-      .catch((err) => console.error("err", err));
+      .catch((err) => setErr(true));
   };
-
-  // (err) => setErr(err)
-  // (err ? { errorText } : "")
-  // console.error("err", err)
-  // err({ errorText })
-
-  // const ErrorHandler = ({ err }) => {
-  //   return (
-  //     <div role="alert">
-  //       <p>An error occurred:</p>
-  //       <pre>{err.message}</pre>
-  //     </div>
-  //   );
-  // };
 
   useEffect(() => {
     fetch(urlEffectiveDate)
       .then((response) => response.json())
       .then((data) => {
-        // const effectiveDate = data[0].effectiveDate;
-        // effectiveDate.innerHTML = data[0].effectiveDate;
-        // const effectiveDate = document.querySelector(".effective-date");
-        // effectiveDate.innerHTML = data[0].effectiveDate;
-
-        const effectiveDate = document.querySelector(".effective-date");
-        effectiveDate.innerHTML = data[0].effectiveDate;
+        setEffectiveDate(data[0].effectiveDate);
       })
-      .catch((err) => console.error("err", err));
+      .catch((err) => setErr(true));
   }, []);
-
-  // err
-  // ()();
-  //   {
-  //   return <ErrorHandler error={error} />
-  // }
-  // (err) => (err ? { errorText } : "")
-  // <p>error</p>
-  // console.error("err", err)
 
   return (
     <div className="container-sm shadow rounded">
@@ -123,15 +94,10 @@ function App() {
           <span className="col-3 effective-date-text text">
             Ostatnia aktualizacja:
           </span>
-          <span className="col effective-date text"></span>
-          {/* (({getOutOfMoney.err}) ? {errorText} : "") */}
-          {/* {err.length ===
-            1(<span className="alert-text">error text error text</span>)} */}
-          {/* if(isLoading) {
-        return (
-        <div> Loading... </div>
-        )
-    } */}
+          <span className="col effective-date text">{effeciveDate}</span>
+          {err && (
+            <span className="alert-text">Wystąpił błąd pobierania danych.</span>
+          )}
         </div>
       </div>
     </div>
